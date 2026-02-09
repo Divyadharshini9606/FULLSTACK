@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KCET Learning</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="container mt-4">
+
+<div class="card p-3 w-75 mx-auto">
+<h4 class="text-center text-primary">KCET Learning Application</h4>
+
+<div id="quiz">
+<h5 id="q"></h5>
+<div id="opt"></div>
+
+<button id="p" class="btn btn-secondary mt-2">Prev</button>
+<button id="n" class="btn btn-primary mt-2">Next</button>
+</div>
+
+<div id="res" style="display:none">
+<h4 id="score"></h4>
+<button id="r" class="btn btn-success">Restart</button>
+</div>
+</div>
+
+<script>
+$(function(){
+
+let qs=[
+{q:"HTML stands for?",o:["Hyper Text Markup","Home Tool","Hyperlinks"],a:0},
+{q:"CSS used for?",o:["Logic","Style","DB"],a:1},
+{q:"jQuery is?",o:["JS Lib","OS","Browser"],a:0},
+{q:"Bootstrap for?",o:["Backend","UI","Server"],a:1}
+];
+
+let c=0,ans=[];
+
+let load=()=>{
+ $("#q").text((c+1)+". "+qs[c].q);
+ $("#opt").html("");
+ qs[c].o.forEach((x,i)=>{
+  $("#opt").append(
+  `<input type='radio' name='o' value='${i}' ${ans[c]==i?'checked':''}> ${x}<br>`);
+ });
+};
+
+let sel=()=>$("input[name=o]:checked").val();
+
+$("#n").click(()=>{
+ if(sel()==undefined) return alert("select answer");
+ ans[c]=sel();
+ c<qs.length-1? (c++,load()):show();
+});
+
+$("#p").click(()=>{ if(c>0){c--;load();} });
+
+let show=()=>{
+ let s=0;
+ qs.forEach((x,i)=>{ if(ans[i]==x.a) s++; });
+ $("#quiz").hide();
+ $("#score").text("Score: "+s+"/"+qs.length);
+ $("#res").show();
+};
+
+$("#r").click(()=>{ c=0; ans=[]; $("#res").hide(); $("#quiz").show(); load(); });
+
+load();
+
+});
+</script>
+</body>
+</html>
